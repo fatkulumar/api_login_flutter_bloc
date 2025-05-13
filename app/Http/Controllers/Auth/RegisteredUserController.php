@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Traits\ResultService;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -15,13 +13,12 @@ use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
-    use ResultService;
     /**
      * Handle an incoming registration request.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -39,8 +36,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        $this->setResult(Auth::user())->setStatus(true)->setMessage('Berhasil Register')->setCode(JsonResponse::HTTP_OK);
-
-        return $this->toJson();
+        return response()->noContent();
     }
 }
