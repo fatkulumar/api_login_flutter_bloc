@@ -20,9 +20,12 @@ class LoginController extends Controller
     public function __invoke(LoginRequest $request)
     {
         try {
+            $errorPassword = [
+                "password" => ["Password Salah."]
+            ];
             $user = User::where('email', $request->post('email'))->first();
             if (!Hash::check($request->post('password'), $user->password)) {
-                $this->setResult(null)->setStatus(false)->setMessage('Password salah')->setCode(JsonResponse::HTTP_UNAUTHORIZED);
+                $this->setResult($errorPassword)->setStatus(false)->setMessage('Password salah')->setCode(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
                 return $this->toJson();
             }
 
